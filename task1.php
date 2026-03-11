@@ -1,22 +1,34 @@
 <?php
+
 $result = "";
+$num1 = isset($_POST['num1']) ? $_POST['num1'] : '';
+$num2 = isset($_POST['num2']) ? $_POST['num2'] : '';
+$operation = isset($_POST['operation']) ? $_POST['operation'] : '+';
 
 if (isset($_POST['submit'])) {
-    $num1 = $_POST['num1'];
-    $num2 = $_POST['num2'];
-    $operation = $_POST['operation'];
-
-    if ($operation == "+") {
-        $result = $num1 + $num2;
-    } elseif ($operation == "-") {
-        $result = $num1 - $num2;
-    } elseif ($operation == "*") {
-        $result = $num1 * $num2;
-    } elseif ($operation == "/") {
-        if ($num2 == 0) {
-            $result = "Cannot divide by zero";
-        } else {
-            $result = $num1 / $num2;
+    // Validate inputs
+    if (!is_numeric($num1) || !is_numeric($num2)) {
+        $result = "Please enter valid numbers.";
+    } else {
+        switch ($operation) {
+            case '+':
+                $result = $num1 + $num2;
+                break;
+            case '-':
+                $result = $num1 - $num2;
+                break;
+            case '*':
+                $result = $num1 * $num2;
+                break;
+            case '/':
+                if ($num2 == 0) {
+                    $result = "Cannot divide by zero";
+                } else {
+                    $result = $num1 / $num2;
+                }
+                break;
+            default:
+                $result = "Invalid operation.";
         }
     }
 }
@@ -42,24 +54,24 @@ if (isset($_POST['submit'])) {
 
     <form method="POST">
         <label>First Number:</label><br>
-        <input type="number" name="num1" required><br><br>
+        <input type="number" name="num1" value="<?php echo htmlspecialchars($num1); ?>" required><br><br>
 
         <label>Operation:</label><br>
         <select name="operation">
-            <option value="+">Addition (+)</option>
-            <option value="-">Subtraction (-)</option>
-            <option value="*">Multiplication (*)</option>
-            <option value="/">Division (/)</option>
+            <option value="+" <?php if ($operation=='+') echo 'selected'; ?>>Addition (+)</option>
+            <option value="-" <?php if ($operation=='-') echo 'selected'; ?>>Subtraction (-)</option>
+            <option value="*" <?php if ($operation=='*') echo 'selected'; ?>>Multiplication (*)</option>
+            <option value="/" <?php if ($operation=='/') echo 'selected'; ?>>Division (/)</option>
         </select><br><br>
 
         <label>Second Number:</label><br>
-        <input type="number" name="num2" required><br><br>
+        <input type="number" name="num2" value="<?php echo htmlspecialchars($num2); ?>" required><br><br>
 
         <input type="submit" name="submit" value="Calculate">
     </form>
 
     <?php if ($result !== ""): ?>
-        <h3>Result: <?php echo $result; ?></h3>
+        <h3>Result: <?php echo htmlspecialchars($result); ?></h3>
     <?php endif; ?>
 </div>
 </body>
