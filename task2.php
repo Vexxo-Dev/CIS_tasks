@@ -16,14 +16,12 @@
         $a = (int)$_POST['side1'];
         $b = (int)$_POST['side2'];
         $c = (int)$_POST['side3'];
-        if ($a == $b && $b == $c) {
-            $type = "Equilateral";
-        } elseif ($a == $b || $b == $c || $a == $c) {
-            $type = "Isosceles";
-        } else {
-            $type = "Scalene";
-        }
-        echo "<div class='result'>Triangle Type: $type</div>";
+            $type = match (true) {
+                $a == $b && $b == $c => "Equilateral",
+                $a == $b || $b == $c || $a == $c => "Isosceles",
+                default => "Scalene"
+            };
+            echo "<div class='result'>Triangle Type: $type</div>";
     }
     ?>
     <!--- Task 2: Given an integer N, calculate and print the number of digits present in N --->
